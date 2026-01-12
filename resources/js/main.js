@@ -5,31 +5,31 @@ let selectedItemType = null;
 
 Neutralino.init();
 
-// Determine correct path separator for current OS based on the selected path
+
 function getPathSeparator(basePath) {
     return basePath && basePath.includes('\\') ? '\\' : '/';
 }
 
-// Helper function to delete directories recursively
+
 async function deleteDirectoryRecursive(dirPath, separator) {
     try {
         const entries = await Neutralino.filesystem.readDirectory(dirPath);
         
-        // Delete all files and subdirectories
+    
         for (const entry of entries) {
-            // Skip current/parent markers if present
+    
             if(entry.entry === '.' || entry.entry === '..') continue;
             const fullPath = dirPath + separator + entry.entry;
             if (entry.type === 'DIRECTORY') {
-                // Recursively delete subdirectories
+           
                 await deleteDirectoryRecursive(fullPath, separator);
             } else {
-                // Delete files
+                
                 await Neutralino.filesystem.remove(fullPath);
             }
         }
         
-        // Finally, delete the empty directory
+      
         await Neutralino.filesystem.remove(dirPath);
     } catch(err) {
         console.error("Error deleting directory:", dirPath, err);
@@ -59,9 +59,9 @@ try {
     const entries = await Neutralino.filesystem.readDirectory(currentPath);
     console.log(entries);
     
-    // Display entries in the HTML
+ 
     const fileList = document.getElementById('fileList');
-    fileList.innerHTML = ''; // Clear previous entries
+    fileList.innerHTML = ''; 
     
     entries.forEach(entry => {
         const li = document.createElement('li');
@@ -70,7 +70,7 @@ try {
         li.setAttribute('data-name', entry.entry);
         li.setAttribute('data-type', entry.type);
         
-        // Click to select
+       
         li.addEventListener('click', () => {
             document.querySelectorAll('#fileList li').forEach(item => item.classList.remove('selected'));
             li.classList.add('selected');
@@ -79,7 +79,7 @@ try {
             document.getElementById('deleteFolderBtn').disabled = false;
         });
         
-        // Right-click for context menu
+   
         li.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             document.querySelectorAll('#fileList li').forEach(item => item.classList.remove('selected'));
@@ -128,7 +128,7 @@ async function openFile(fileName){
   return await Neutralino.os.open(fullPath);
 }
 
-// Create Folder Button
+
 document.getElementById('createFolderBtn').addEventListener("click", async() => {
     if(!currentPath){
         alert("Please select a folder first");
@@ -142,19 +142,19 @@ document.getElementById('createFolderBtn').addEventListener("click", async() => 
         const pathSeparator = currentPath.includes('\\') ? '\\' : '/';
         const folderPath = currentPath + pathSeparator + folderName.trim();
         
-        // Check if folder already exists
+      
         try {
             await Neutralino.filesystem.getStats(folderPath);
             alert("Folder already exists!");
             return;
         } catch(err) {
-            // Folder doesn't exist, which is what we want
+
         }
         
         await Neutralino.filesystem.createDirectory(folderPath);
         Neutralino.os.showNotification("Success", `Folder '${folderName}' created successfully`);
         
-        // Reload directory listing
+       
         document.getElementById('readdirectory').click();
     } catch(err) {
         console.error("Create folder error:", err);
@@ -162,7 +162,7 @@ document.getElementById('createFolderBtn').addEventListener("click", async() => 
     }
 });
 
-// Delete Button (files or folders)
+
 document.getElementById('deleteFolderBtn').addEventListener("click", async() => {
     if(!currentPath){
         alert("Please select a folder first");
@@ -203,7 +203,7 @@ document.getElementById('deleteFolderBtn').addEventListener("click", async() => 
     }
 });
 
-// Context Menu Functions
+
 function showContextMenu(x, y) {
     const contextMenu = document.getElementById('contextMenu');
     contextMenu.style.display = 'block';
@@ -216,7 +216,7 @@ function hideContextMenu() {
     contextMenu.style.display = 'none';
 }
 
-// Delete from context menu
+
 document.getElementById('deleteItemBtn').addEventListener("click", async() => {
     if(!selectedItem) return;
     
@@ -250,7 +250,7 @@ document.getElementById('deleteItemBtn').addEventListener("click", async() => {
     }
 });
 
-// Rename from context menu
+
 document.getElementById('renameItemBtn').addEventListener("click", async() => {
     if(!selectedItem) return;
     
@@ -265,23 +265,23 @@ document.getElementById('renameItemBtn').addEventListener("click", async() => {
         const oldPath = currentPath + pathSeparator + selectedItem;
         const newPath = currentPath + pathSeparator + newName.trim();
         
-        // Check if new name already exists
+       
         try {
             await Neutralino.filesystem.getStats(newPath);
             alert("A file/folder with this name already exists!");
             hideContextMenu();
             return;
         } catch(err) {
-            // Path doesn't exist, which is what we want
+           
         }
         
-        // Rename using writeFile for simple renaming logic
+       
         const stats = await Neutralino.filesystem.getStats(oldPath);
         if(stats.isDirectory){
-            // For directories, we need to use a workaround since Neutralino doesn't have direct rename
+    
             alert("Folder renaming is not directly supported. Please use your file manager.");
         } else {
-            // For files, we can copy and delete
+           
             const content = await Neutralino.filesystem.readFile(oldPath);
             await Neutralino.filesystem.writeFile(newPath, content);
             await Neutralino.filesystem.removeFile(oldPath);
@@ -297,7 +297,7 @@ document.getElementById('renameItemBtn').addEventListener("click", async() => {
     }
 });
 
-// Close context menu when clicking elsewhere
+
 document.addEventListener('click', () => {
     hideContextMenu();
 });
