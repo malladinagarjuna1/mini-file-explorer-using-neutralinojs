@@ -6,9 +6,7 @@
 
 Built with [Neutralinojs](https://neutralino.js.org) for **GSoC 2026**
 
-[![Neutralinojs](https://img.shields.io/badge/Neutralinojs-6.4.0-blueviolet)](https://neutralino.js.org)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
+
 
 </div>
 
