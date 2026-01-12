@@ -127,12 +127,12 @@ The application will launch in a native window on your platform (Windows, macOS,
 
 ##  What This Project Demonstrates
 
-✅ **Deep understanding** of Neutralinojs as an application developer  
-✅ **Proper usage** of filesystem and OS native APIs  
-✅ **Safe file operations** with error handling and user confirmations  
-✅ **Async/await patterns** for non-blocking operations  
-✅ **Modern UI/UX** with CSS gradients and animations  
-✅ **Cross-platform compatibility** without platform-specific code  
+ **Deep understanding** of Neutralinojs as an application developer  
+ **Proper usage** of filesystem and OS native APIs  
+ **Safe file operations** with error handling and user confirmations  
+ **Async/await patterns** for non-blocking operations  
+ **Modern UI/UX** with CSS gradients and animations  
+ **Cross-platform compatibility** without platform-specific code  
 
 ---
 
