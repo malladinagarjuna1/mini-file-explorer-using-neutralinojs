@@ -23,7 +23,6 @@
 
   ],
    "nativeBlockList": [
-    "filesystem.remove",
     "extensions.*"
   ],
   "globalVariables": {
