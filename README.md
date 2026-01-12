@@ -1,132 +1,214 @@
-# Mini File Explorer – Neutralinojs
+<div align="center">
 
-A lightweight, cross-platform **desktop mini file explorer** built using **Neutralinojs**.  
-This application demonstrates how to use Neutralinojs native APIs to interact with the operating system’s filesystem in a safe and user-friendly way.
+# 📁 Mini File Explorer
 
-The project is created as a **sample Neutralinojs app** to understand the framework from an **app developer’s perspective**, as recommended for **GSoC 2026 – Neutralinojs**.
+### A Lightweight Cross-Platform Desktop File Manager
 
----
+Built with [Neutralinojs](https://neutralino.js.org) for **GSoC 2026**
 
-## Features
+[![Neutralinojs](https://img.shields.io/badge/Neutralinojs-6.4.0-blueviolet)](https://neutralino.js.org)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
 
-- Select any folder from the local system
-- List files and subfolders inside the selected directory
-- Navigate into subfolders and go back to parent directories
-- View file and folder metadata (size, type, timestamps)
-- Open files using the system’s default application
-- Create new files inside the selected directory
-- Delete files and folders with confirmation
-- Show native desktop notifications for user actions
-- Simple and minimal UI focused on functionality
+</div>
 
 ---
 
-## Native APIs Used
+## 📖 Overview
 
-This project uses multiple **Neutralinojs native APIs**, including:
+A **lightweight, cross-platform desktop file explorer** that demonstrates the power of Neutralinojs native APIs for filesystem operations. This application showcases how to build native desktop utilities using web technologies without the overhead of Electron or other heavy frameworks.
 
-### Filesystem
-- `filesystem.readDirectory()`
-- `filesystem.getStats()`
-- `filesystem.writeFile()`
-- `filesystem.removeFile()`
-- `filesystem.removeDirectory()`
-
-###  OS
-- `os.showOpenDialog()`
-- `os.showSaveDialog()`
-- `os.open()`
-- `os.showNotification()`
-
-###  Window & App
-- `window.minimize()`
-- `window.maximize()`
-- `app.exit()`
-
-These APIs enable true native desktop functionality without bundling a heavy browser engine.
+Created as a sample project to understand Neutralinojs from an **application developer's perspective**, as recommended for **GSoC 2026 – Neutralinojs**.
 
 ---
 
-##  Tech Stack
+## ✨ Features
 
-- **Neutralinojs**
-- HTML
-- CSS
-- Vanilla JavaScript
-
-No backend server or database is used.
+- 📂 **Folder Selection** – Browse and select any folder from your local system
+- 📋 **Directory Listing** – View files and subfolders with intuitive icons
+- 🔍 **File Operations**
+  - Create new folders with validation
+  - Delete files and folders (with recursive support)
+  - View file/folder metadata (size, type, timestamps)
+- 🎨 **Modern Dark UI** – Sleek gradient-based interface with smooth animations
+- 🔔 **Desktop Notifications** – Native notifications for user actions
+- ⚡ **Fast & Lightweight** – No bundled browser engine, minimal resource usage
 
 ---
 
-## Project Structure
+## 🛠️ Tech Stack
 
+| Technology | Purpose |
+|------------|---------|
+| **Neutralinojs** | Native desktop framework |
+| **HTML/CSS** | User interface |
+| **Vanilla JavaScript** | Application logic |
+
+> **Note:** No backend server, database, or heavy dependencies required!
+
+---
+
+## 🔌 Neutralinojs Native APIs Used
+
+### 📁 Filesystem API
+```javascript
+Neutralino.filesystem.readDirectory()      // List directory contents
+Neutralino.filesystem.getStats()           // Get file/folder metadata
+Neutralino.filesystem.createDirectory()    // Create new folders
+Neutralino.filesystem.remove()             // Delete files and folders
+Neutralino.filesystem.writeFile()          // Create/write files
+```
+
+### 💻 OS API
+```javascript
+Neutralino.os.showFolderDialog()          // Open folder picker
+Neutralino.os.showSaveDialog()            // Save file dialog
+Neutralino.os.open()                      // Open files with default app
+Neutralino.os.showNotification()          // Show desktop notifications
+```
+
+### 🪟 Window & App API
+```javascript
+Neutralino.window.setTitle()              // Update window title
+Neutralino.app.exit()                     // Close application
+```
+
+These APIs provide **true native desktop functionality** without bundling Chromium or any heavy browser engine.
+
+---
+
+## 📂 Project Structure
+
+```
 mini-file-explorer/
-├── index.html
-├── style.css
-├── script.js
-├── neutralino.config.json
-├── README.md
-└── screenshots/
-
-yaml
-Copy code
+├── resources/
+│   ├── index.html              # Main application UI
+│   ├── styles.css              # Dark theme styling
+│   └── js/
+│       ├── main.js             # Application logic
+│       └── neutralino.js       # Neutralino client library
+├── bin/                        # Platform binaries (auto-generated)
+├── neutralino.config.json      # App configuration
+├── .gitignore
+├── LICENSE
+└── README.md
+```
 
 ---
 
-##  How to Run the App
+## 🚀 Getting Started
 
-### 1. Install Neutralinojs CLI
+### Prerequisites
+
+- **Node.js** (for installing Neutralino CLI)
+- **Git** (optional, for cloning)
+
+### Installation & Setup
+
+**1. Install Neutralinojs CLI**
 ```bash
 npm install -g @neutralinojs/neu
-2. Clone the repository
-bash
-Copy code
-git clone <your-repo-url>
+```
+
+**2. Clone the Repository**
+```bash
+git clone https://github.com/malladinagarjuna1/mini-file-explorer-using-neutralinojs.git
 cd mini-file-explorer
-3. Run the app
-bash
-Copy code
+```
+
+**3. Run the Application**
+```bash
 neu run
- What This Project Demonstrates
-Understanding of Neutralinojs as an application developer
+```
 
-Correct usage of filesystem and OS native APIs
+The application will launch in a native window on your platform (Windows, macOS, or Linux).
 
-Safe handling of file operations (create/delete)
+---
 
-Proper async handling and error management
+## 🎯 What This Project Demonstrates
 
-Building lightweight desktop utilities using web technologies
+✅ **Deep understanding** of Neutralinojs as an application developer  
+✅ **Proper usage** of filesystem and OS native APIs  
+✅ **Safe file operations** with error handling and user confirmations  
+✅ **Async/await patterns** for non-blocking operations  
+✅ **Modern UI/UX** with CSS gradients and animations  
+✅ **Cross-platform compatibility** without platform-specific code  
 
- Limitations
-Automatic file system change detection (file watcher) is not implemented
+---
 
-Notifications are shown only for actions performed inside the app
+## 🔒 Security Features
 
-These limitations are intentional to keep the app minimal and aligned with current Neutralinojs APIs.
+- **Token-based authentication** for API calls
+- **Native permission system** via `nativeAllowList` and `nativeBlockList`
+- **User confirmation** for destructive operations (delete)
+- **Path validation** to prevent malicious file access
 
- Future Improvements
-File watcher support (polling or native API)
+---
 
-Folder creation support
+## 🐛 Known Limitations
 
-Sorting and filtering files
+| Limitation | Reason |
+|------------|--------|
+| No automatic file watch | Requires polling or future native API |
+| Basic file operations | Keeping the app minimal and focused |
+| Limited file preview | Relies on system default apps |
 
-Dark mode
+> These limitations are **intentional** to maintain simplicity and demonstrate core Neutralinojs APIs.
 
-Improved UI layout
+---
 
- Motivation
+## 🚧 Future Enhancements
+
+- [ ] File watcher for real-time updates
+- [ ] File/folder search functionality
+- [ ] Copy/paste/move operations
+- [ ] Multi-file selection
+- [ ] File preview for images/text
+- [ ] Keyboard shortcuts
+- [ ] Theme toggle (light/dark)
+- [ ] Favorites/bookmarks system
+
+---
+
+## 💡 Motivation
+
 This project was built to:
 
-Learn Neutralinojs deeply
+1. **Learn Neutralinojs deeply** – Understand its architecture and APIs
+2. **Gain practical experience** – Build a real-world desktop utility
+3. **Prepare for GSoC 2026** – Demonstrate capability for meaningful contributions
+4. **Contribute to the ecosystem** – Provide a reference implementation for developers
 
-Understand its native API design
+---
 
-Prepare for meaningful contributions to the Neutralinojs ecosystem
+## 🤝 Contributing
 
-Serve as a foundation for future GSoC contributions
+Contributions, issues, and feature requests are welcome!  
 
- Contributing
-Feedback and suggestions are welcome.
-This project follows Neutralinojs coding and contribution guidelines.
+- 🐛 **Found a bug?** [Open an issue](https://github.com/malladinagarjuna1/mini-file-explorer-using-neutralinojs/issues)
+- 💡 **Have an idea?** [Start a discussion](https://github.com/malladinagarjuna1/mini-file-explorer-using-neutralinojs/discussions)
+- 🔧 **Want to contribute?** Fork the repo and submit a PR
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [Neutralinojs Team](https://github.com/neutralinojs) for creating an amazing lightweight framework
+- [GSoC 2026](https://summerofcode.withgoogle.com/) for inspiring this project
+- The open-source community for continuous support
+
+---
+
+<div align="center">
+
+**⭐ Star this repo if you find it helpful!**
+
+Made with ❤️ using [Neutralinojs](https://neutralino.js.org)
+
+</div>
