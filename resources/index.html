@@ -5,22 +5,52 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h2>Mini File Explorer</h2>
+  <div class="container">
+    <header>
+      <h1>📁 File Explorer</h1>
+    </header>
 
-  <button id="selectFolderBtn">Select Folder</button>
-  <p id="folderPath">No folder selected</p>
-  <button id="readdirectory">Read Directory</button>
-  <button id="getStats">Get Stats</button>
-  <button id="createFolderBtn">Create Folder</button>
-  <button id="deleteFolderBtn" disabled>Delete Folder</button>
-  <button id="backBtn" disabled>⬅ Back</button>
+    <div class="toolbar">
+      <button id="selectFolderBtn" class="btn-primary">
+        <span class="icon">📂</span> Select Folder
+      </button>
+      <button id="createFolderBtn" class="btn-success">
+        <span class="icon">➕</span> New Folder
+      </button>
+      <button id="deleteFolderBtn" class="btn-danger" disabled>
+        <span class="icon">🗑️</span> Delete
+      </button>
+    </div>
 
-  <ul id="fileList"></ul>
+    <div class="path-bar">
+      <span class="path-label">Current Path:</span>
+      <span id="folderPath" class="path-value">No folder selected</span>
+    </div>
 
+    <div class="action-bar">
+      <button id="backBtn" class="btn-secondary" disabled>
+        <span class="icon">⬅️</span> Back
+      </button>
+      <button id="readdirectory" class="btn-secondary">
+        <span class="icon">🔄</span> Refresh
+      </button>
+      <button id="getStats" class="btn-secondary">
+        <span class="icon">ℹ️</span> Info
+      </button>
+    </div>
+
+    <div class="file-browser">
+      <ul id="fileList"></ul>
+    </div>
+  </div>
  
-  <div id="contextMenu" style="display: none; position: absolute;">
-    <button id="deleteItemBtn">Delete</button>
-    <button id="renameItemBtn">Rename</button>
+  <div id="contextMenu" class="context-menu">
+    <button id="deleteItemBtn">
+      <span class="icon">🗑️</span> Delete
+    </button>
+    <button id="renameItemBtn">
+      <span class="icon">✏️</span> Rename
+    </button>
   </div>
 
   <script src="js/neutralino.js"></script>
