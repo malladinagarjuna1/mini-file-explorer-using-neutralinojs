@@ -11,11 +11,17 @@
   <p id="folderPath">No folder selected</p>
   <button id="readdirectory">Read Directory</button>
   <button id="getStats">Get Stats</button>
+  <button id="createFolderBtn">Create Folder</button>
+  <button id="deleteFolderBtn" disabled>Delete Folder</button>
   <button id="backBtn" disabled>⬅ Back</button>
 
   <ul id="fileList"></ul>
 
-
+  <!-- Context Menu -->
+  <div id="contextMenu" style="display: none; position: absolute;">
+    <button id="deleteItemBtn">Delete</button>
+    <button id="renameItemBtn">Rename</button>
+  </div>
 
   <script src="js/neutralino.js"></script>
   <script src="js/main.js"></script>
