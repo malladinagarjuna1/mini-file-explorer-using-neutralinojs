@@ -7,6 +7,15 @@
 Built with [Neutralinojs](https://neutralino.js.org) for **GSoC 2026**
 
 
+## demonstration video
+
+
+
+https://github.com/user-attachments/assets/536ac14b-cddb-4515-9b52-4f889d7e4c91
+
+
+
+
 
 </div>
 
