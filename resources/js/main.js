@@ -37,18 +37,7 @@ async function deleteDirectoryRecursive(dirPath, separator) {
     }
 }
 
-document.getElementById('selectFolderBtn').addEventListener("click", async() => {
-    try{
-        const selectedPath = await Neutralino.os.showFolderDialog('Select a folder', {
-            defaultPath: 'C:\\Users'
-        });
-        console.log(selectedPath);
-        currentPath = selectedPath;
-        document.getElementById("folderPath").innerText= selectedPath;
-    }catch(err){
-        console.error(err);
-    }
-});
+// FOLDER SELECTION WITH POLLING (see polling section below for actual implementation)
 
 document.getElementById('readdirectory').addEventListener("click", async() => {
 if(!currentPath){
@@ -303,3 +292,191 @@ document.addEventListener('click', () => {
 });
 
 
+
+let previousSnapshot = null;
+let pollingTimer = null;
+const POLLING_INTERVAL = 3000;
+
+
+
+async function takeSnapshot(path) {
+    const snapshot = {};
+    
+    try {
+        const entries = await Neutralino.filesystem.readDirectory(path);
+            const separator = getPathSeparator(path);
+        
+        for (const entry of entries) {
+        
+            if (entry.entry === '.' || entry.entry === '..') continue;
+            
+            try {
+                const fullPath = path + separator + entry.entry;
+                const stats = await Neutralino.filesystem.getStats(fullPath);
+                
+                snapshot[entry.entry] = {
+                    mtime: stats.modifiedAt || stats.createdAt || 0,
+                    isDir: stats.isDirectory
+                };
+            } catch (err) {
+                console.warn(`Could not get stats for: ${entry.entry}`, err);
+            }
+        }
+    } catch (err) {
+        console.error('Error taking snapshot:', err);
+    }
+    
+    return snapshot;
+}
+
+
+
+function compareSnapshots(oldSnap, newSnap) {
+    const added = [];
+    const removed = [];
+    const modified = [];
+    
+   
+    for (const fileName in newSnap) {
+        if (!oldSnap[fileName]) {
+           
+            added.push(fileName);
+        } else if (oldSnap[fileName].mtime !== newSnap[fileName].mtime) {
+          
+            modified.push(fileName);
+        }
+    }
+    
+  
+    for (const fileName in oldSnap) {
+        if (!newSnap[fileName]) {
+            removed.push(fileName);
+        }
+    }
+    
+    return { added, removed, modified };
+}
+
+
+
+async function reactToChanges(changes) {
+    const { added, removed, modified } = changes;
+    
+    let message = '';
+    
+    if (added.length > 0) {
+        const itemNames = added.join(', ');
+        message += ` ADDED (${added.length}):\n${itemNames}\n\n`;
+    }
+    
+    if (removed.length > 0) {
+        const itemNames = removed.join(', ');
+        message += ` REMOVED (${removed.length}):\n${itemNames}\n\n`;
+    }
+    
+    if (modified.length > 0) {
+        const itemNames = modified.join(', ');
+        message += ` MODIFIED (${modified.length}):\n${itemNames}\n\n`;
+    }
+    
+    if (message) {
+        alert(' FILE CHANGES DETECTED!\n\n' + message);
+    }
+    
+ 
+    document.getElementById('readdirectory').click();
+}
+
+
+async function startPolling(path) {
+   
+    stopPolling();
+    
+    if (!path) {
+        console.warn('Cannot start polling: no path provided');
+        return;
+    }
+    
+    console.log(`Starting polling for: ${path}`);
+    
+
+    document.getElementById('pollingIndicator').style.display = 'inline-flex';
+    
+
+    previousSnapshot = await takeSnapshot(path);
+    
+   
+    pollingTimer = setInterval(async () => {
+        try {
+  
+            const newSnapshot = await takeSnapshot(path);
+            
+            const changes = compareSnapshots(previousSnapshot, newSnapshot);
+            
+      
+            const hasChanges = 
+                changes.added.length > 0 || 
+                changes.removed.length > 0 || 
+                changes.modified.length > 0;
+            
+            if (hasChanges) {
+                console.log('Changes detected:', changes);
+                reactToChanges(changes);
+            }
+            
+       
+            previousSnapshot = newSnapshot;
+            
+        } catch (err) {
+            console.error('Error during polling:', err);
+        }
+    }, POLLING_INTERVAL);
+}
+
+
+
+function stopPolling() {
+    if (pollingTimer) {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+        previousSnapshot = null;
+        
+    
+        document.getElementById('pollingIndicator').style.display = 'none';
+        
+        console.log('Polling stopped');
+    }
+}
+
+
+document.getElementById('selectFolderBtn').addEventListener("click", async() => {
+    try{
+        const selectedPath = await Neutralino.os.showFolderDialog('Select a folder', {
+            defaultPath: 'C:\\Users'
+        });
+        console.log(selectedPath);
+        
+     
+        stopPolling();
+        
+        currentPath = selectedPath;
+        document.getElementById("folderPath").innerText = selectedPath;
+        
+   
+        document.getElementById('readdirectory').click();
+        
+        
+        startPolling(selectedPath);
+        
+    } catch(err){
+        console.error(err);
+    }
+});
+
+
+
+
+Neutralino.events.on("windowClose", () => {
+    stopPolling();
+    Neutralino.app.exit();
+});

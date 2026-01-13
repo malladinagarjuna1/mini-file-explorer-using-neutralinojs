@@ -26,12 +26,13 @@ Created as a sample project to understand Neutralinojs from an **application dev
 
 - 📂 **Folder Selection** – Browse and select any folder from your local system
 - 📋 **Directory Listing** – View files and subfolders with intuitive icons
+- � **Auto-Refresh** – Automatic file change detection with polling-based monitoring
 - 🔍 **File Operations**
   - Create new folders with validation
   - Delete files and folders (with recursive support)
   - View file/folder metadata (size, type, timestamps)
 - 🎨 **Modern Dark UI** – Sleek gradient-based interface with smooth animations
-- 🔔 **Desktop Notifications** – Native notifications for user actions
+- 🔔 **Desktop Notifications** – Native notifications for file changes and user actions
 - ⚡ **Fast & Lightweight** – No bundled browser engine, minimal resource usage
 
 ---
@@ -133,6 +134,60 @@ The application will launch in a native window on your platform (Windows, macOS,
 ✅ **Async/await patterns** for non-blocking operations  
 ✅ **Modern UI/UX** with CSS gradients and animations  
 ✅ **Cross-platform compatibility** without platform-specific code  
+✅ **Automatic change detection** using polling-based directory snapshots  
+
+---
+
+## 🔄 File Change Detection (Auto-Refresh)
+
+The application features an **automatic file change detection system** that monitors the currently selected directory for any modifications.
+
+### How It Works
+
+The system uses a **polling-based snapshot comparison** approach:
+
+1. **Initial Snapshot** – When you select a folder, the app takes a snapshot of all files/folders with their metadata (names and modification times)
+
+2. **Continuous Monitoring** – Every 3 seconds, a new snapshot is taken and compared with the previous one
+
+3. **Change Detection** – The comparison identifies:
+   - ✅ **Added files/folders** – New items that weren't in the previous snapshot
+   - ❌ **Removed files/folders** – Items that existed before but are now gone
+   - ✏️ **Modified files/folders** – Items with different modification timestamps
+
+4. **User Notification** – When changes are detected:
+   - A popup alert displays what changed
+   - The file list automatically refreshes
+   - A visual indicator (🔄 Auto-refresh active) shows monitoring is active
+
+### Implementation Details
+
+```javascript
+// Snapshot structure (lightweight)
+{
+  "file1.txt": { mtime: 1705190400000, isDir: false },
+  "folder1":   { mtime: 1705190500000, isDir: true }
+}
+
+// Polling interval: 3 seconds
+// No file content tracking (efficient)
+// Automatic cleanup when folder changes
+```
+
+### Why Polling?
+
+Neutralinojs currently doesn't provide a native filesystem watcher API (like Node.js's `fs.watch`). The polling approach:
+
+- ✅ **Works cross-platform** (Windows, macOS, Linux)
+- ✅ **Lightweight** – Only tracks metadata, not file contents
+- ✅ **Reliable** – No dependency on OS-specific events
+- ⚠️ **Trade-off** – 3-second delay vs. instant notifications
+
+### Visual Indicators
+
+- **🔄 Auto-refresh active** badge appears when monitoring a folder
+- Pulsing animation indicates active polling
+- Badge disappears when monitoring stops
 
 ---
 
@@ -147,19 +202,19 @@ The application will launch in a native window on your platform (Windows, macOS,
 
 ## 🐛 Known Limitations
 
-| Limitation | Reason |
-|------------|--------|
-| No automatic file watch | Requires polling or future native API |
-| Basic file operations | Keeping the app minimal and focused |
-| Limited file preview | Relies on system default apps |
+| Limitation | Reason | Solution |
+|------------|--------|----------|
+| Polling-based file watch | No native filesystem event API in Neutralinojs | Uses 3-second polling interval for change detection |
+| Basic file operations | Keeping the app minimal and focused | Future enhancements planned |
+| Limited file preview | Relies on system default apps | Intentional design choice |
 
-> These limitations are **intentional** to maintain simplicity and demonstrate core Neutralinojs APIs.
+> **Note on File Change Detection:** The app uses a polling-based directory snapshot mechanism to detect filesystem changes due to the absence of a native event-based filesystem watcher API in Neutralinojs. This approach involves trade-offs between responsiveness and resource usage. The current implementation checks for changes every 3 seconds, providing a good balance between real-time updates and system performance.
 
 ---
 
 ## 🚧 Future Enhancements
 
-- [ ] File watcher for real-time updates
+- [x] ✅ **File watcher for real-time updates** – Implemented via polling-based snapshot comparison
 - [ ] File/folder search functionality
 - [ ] Copy/paste/move operations
 - [ ] Multi-file selection
@@ -167,6 +222,7 @@ The application will launch in a native window on your platform (Windows, macOS,
 - [ ] Keyboard shortcuts
 - [ ] Theme toggle (light/dark)
 - [ ] Favorites/bookmarks system
+- [ ] Configurable polling interval
 
 ---
 
